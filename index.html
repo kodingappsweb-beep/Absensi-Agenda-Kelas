@@ -14,7 +14,6 @@
   <style>
     * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
     
-    /* DESAIN KARTU CETAK HIBRIDA (PORTRAIT 5.4cm x 8.5cm) */
     .kts-card {
       width: 216px;
       height: 340px;
@@ -29,12 +28,10 @@
       position: relative;
     }
 
-    /* Header Kartu Guru / Staf (Oranye Gradient) */
     .card-header-guru {
       background: linear-gradient(180deg, #d96500 0%, #b85000 100%);
     }
 
-    /* Header Kartu Siswa (Ungu Gradient) */
     .card-header-siswa {
       background: linear-gradient(180deg, #4f46e5 0%, #3730a3 100%);
     }
@@ -77,7 +74,6 @@
       text-transform: uppercase;
     }
 
-    /* Body Kartu */
     .card-body {
       padding: 8px;
       display: flex;
@@ -87,7 +83,6 @@
       flex-grow: 1;
     }
 
-    /* Bingkai Foto Proporsional */
     .photo-frame {
       width: 62px;
       height: 78px;
@@ -105,7 +100,6 @@
       object-position: top center;
     }
 
-    /* Info Identitas Pengguna */
     .user-name {
       font-size: 10.5px;
       font-weight: 700;
@@ -125,7 +119,6 @@
       color: #2d3748;
     }
 
-    /* Badge Kelas */
     .info-badge {
       display: inline-block;
       font-size: 7.5px;
@@ -138,7 +131,6 @@
       margin-bottom: 6px;
     }
 
-    /* Area QR Code */
     .qr-section {
       display: flex;
       justify-content: center;
@@ -146,7 +138,6 @@
       margin-top: auto;
     }
 
-    /* Footer Kartu */
     .card-footer {
       padding: 4px 8px;
       font-size: 6.5px;
@@ -280,9 +271,9 @@
     </div>
     <div class="p-4 m-4 rounded-xl bg-slate-800/80 border border-slate-700/50 text-xs space-y-3">
       <div class="flex items-center justify-between">
-        <span class="text-slate-400 font-medium">Status Sync</span>
+        <span class="text-slate-400 font-medium">Status Sync Realtime</span>
         <span id="sync-status-badge" class="px-2 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-400 rounded-full font-semibold flex items-center gap-1">
-          <i class="fa-solid fa-circle text-[8px]"></i><span id="sync-status-text">Terkoneksi</span>
+          <i class="fa-solid fa-circle text-[8px] animate-pulse"></i><span id="sync-status-text">Realtime Active</span>
         </span>
       </div>
       <p class="text-slate-300 font-semibold truncate" id="sidebar-school-name">Memuat Data...</p>
@@ -348,7 +339,7 @@
           </div>
         </div>
         <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
-          <div class="p-6 border-b border-slate-100 flex justify-between items-center"><h3 class="font-bold text-slate-800 text-lg">Aktivitas Absensi Terbaru</h3><button onclick="switchView('rekap')" class="text-xs text-indigo-600 font-bold">Lihat Semua</button></div>
+          <div class="p-6 border-b border-slate-100 flex justify-between items-center"><h3 class="font-bold text-slate-800 text-lg">Aktivitas Absensi Terbaru (Realtime)</h3><button onclick="switchView('rekap')" class="text-xs text-indigo-600 font-bold">Lihat Semua</button></div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-600">
               <thead class="bg-slate-50 text-xs text-slate-500 uppercase tracking-wider border-b border-slate-100"><tr><th class="px-6 py-3.5">Waktu</th><th class="px-6 py-3.5">ID / NISN</th><th class="px-6 py-3.5">Nama</th><th class="px-6 py-3.5">Kategori Absen</th><th class="px-6 py-3.5">Status</th><th class="px-6 py-3.5">Peran</th></tr></thead>
@@ -390,7 +381,6 @@
             </div>
           </div>
 
-          <!-- Pilihan Kelas Khusus Guru jika Mengajar Semua Kelas -->
           <div id="teacher-class-selector-wrapper" class="hidden">
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Pilih Kelas yang Sedang Diajar Saat Ini</label>
             <select id="agenda-selected-class" class="w-full md:w-1/3 px-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-semibold"></select>
@@ -401,7 +391,6 @@
             <input type="text" id="agenda-materi" placeholder="Contoh: Persamaan Kuadrat dan Fungsi Eksponen..." class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-semibold">
           </div>
 
-          <!-- Bagian Scan QR di Agenda Kelas -->
           <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-camera text-indigo-600"></i><span>Scan QR Kehadiran Siswa untuk Kelas Ini</span></h4>
@@ -468,7 +457,6 @@
               </div>
             </div>
 
-            <!-- Tombol Status Kehadiran -->
             <div class="mt-6 pt-4 border-t border-slate-100">
               <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Status Kehadiran:</label>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="scan-mode-container">
@@ -593,14 +581,34 @@
         <div class="bg-white rounded-3xl border shadow-xs overflow-hidden">
           <div class="p-6 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h3 class="font-bold text-slate-800 text-lg">Rekapitulasi Absensi & Agenda</h3>
-              <p class="text-xs text-slate-500">Filter berdasarkan tanggal, nama, kelas dan bagikan ke WhatsApp</p>
+              <h3 class="font-bold text-slate-800 text-lg">Rekapitulasi Absensi & Agenda (Realtime)</h3>
+              <p class="text-xs text-slate-500">Filter lengkap berdasarkan waktu, nama, kelas, peran, dan jenis sesi</p>
             </div>
             <div class="flex flex-wrap items-center gap-3">
               <input type="date" id="rekap-date-filter" onchange="renderRekapTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold">
               <input type="text" id="rekap-name-search" placeholder="Cari nama..." oninput="renderRekapTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs">
               <select id="rekap-class-filter" onchange="renderRekapTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold"></select>
+              
+              <!-- Filter Peran (Hanya Muncul untuk Admin) -->
+              <select id="rekap-role-filter" onchange="renderRekapTable()" class="admin-only-filter px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold">
+                <option value="ALL">Semua Peran (Guru & Siswa)</option>
+                <option value="Guru">Guru</option>
+                <option value="Siswa">Siswa</option>
+              </select>
+
+              <!-- Filter Jenis Sesi Absensi (Hanya Muncul untuk Admin) -->
+              <select id="rekap-session-filter" onchange="renderRekapTable()" class="admin-only-filter px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold">
+                <option value="ALL">Semua Jenis Sesi</option>
+                <option value="Masuk Sekolah">Masuk Sekolah</option>
+                <option value="Shalat Duha">Shalat Duha</option>
+                <option value="Shalat Dzuhur">Shalat Dzuhur</option>
+                <option value="Pulang">Pulang</option>
+              </select>
+
               <button onclick="shareRekapToWhatsApp()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-1.5"><i class="fa-brands fa-whatsapp text-sm"></i><span>Share Rekap WA</span></button>
+              
+              <!-- TOMBOL EKSPOR EXCEL / CSV -->
+              <button onclick="exportRekapExcel()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-1.5"><i class="fa-solid fa-file-excel text-sm"></i><span>Ekspor CSV/Excel</span></button>
             </div>
           </div>
           <div class="overflow-x-auto">
@@ -609,7 +617,8 @@
                 <tr>
                   <th class="px-6 py-3.5">Waktu / Tanggal</th>
                   <th class="px-6 py-3.5">NISN / ID</th>
-                  <th class="px-6 py-3.5">Nama Siswa</th>
+                  <th class="px-6 py-3.5">Nama</th>
+                  <th class="px-6 py-3.5">Peran</th>
                   <th class="px-6 py-3.5">Kelas</th>
                   <th class="px-6 py-3.5">Jenis / Sesi</th>
                   <th class="px-6 py-3.5">Status</th>
@@ -626,21 +635,37 @@
         <div class="bg-white rounded-3xl border shadow-xs overflow-hidden">
           <div class="p-6 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h3 class="font-bold text-slate-800 text-lg">Daftar Siswa Belum Absen & Aksi Manual</h3>
-              <p class="text-xs text-slate-500">Antisipasi siswa tidak bawa kartu QR dengan menentukan Hadir/Izin/Sakit/Alfa secara manual</p>
+              <h3 class="font-bold text-slate-800 text-lg">Daftar Belum Absen & Aksi Manual (Realtime)</h3>
+              <p class="text-xs text-slate-500">Menampilkan data realtime siswa/guru yang belum melakukan scan absensi</p>
             </div>
             <div class="flex flex-wrap items-center gap-3">
               <input type="date" id="belum-date-filter" onchange="renderBelumAbsenTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold">
-              <input type="text" id="belum-name-search" placeholder="Cari nama siswa..." oninput="renderBelumAbsenTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs">
+              <input type="text" id="belum-name-search" placeholder="Cari nama..." oninput="renderBelumAbsenTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs">
               <select id="belum-class-filter" onchange="renderBelumAbsenTable()" class="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold"></select>
+
+              <!-- Filter Peran (Hanya Muncul untuk Admin) -->
+              <select id="belum-role-filter" onchange="renderBelumAbsenTable()" class="admin-only-filter px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold">
+                <option value="ALL">Semua Peran (Guru & Siswa)</option>
+                <option value="Guru">Guru</option>
+                <option value="Siswa">Siswa</option>
+              </select>
+
+              <!-- Filter Jenis Sesi Absensi (Hanya Muncul untuk Admin) -->
+              <select id="belum-session-filter" onchange="renderBelumAbsenTable()" class="admin-only-filter px-3 py-2 bg-slate-50 border rounded-xl text-xs font-semibold">
+                <option value="Masuk Sekolah">Masuk Sekolah</option>
+                <option value="Shalat Duha">Shalat Duha</option>
+                <option value="Shalat Dzuhur">Shalat Dzuhur</option>
+                <option value="Pulang">Pulang</option>
+              </select>
             </div>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
               <thead class="bg-slate-50 text-xs text-slate-500 uppercase">
                 <tr>
-                  <th class="px-6 py-3.5">NISN</th>
-                  <th class="px-6 py-3.5">Nama Siswa</th>
+                  <th class="px-6 py-3.5">NISN / ID</th>
+                  <th class="px-6 py-3.5">Nama</th>
+                  <th class="px-6 py-3.5">Peran</th>
                   <th class="px-6 py-3.5">Kelas</th>
                   <th class="px-6 py-3.5 text-center">Aksi Manual (Hadir / Izin / Sakit / Alfa)</th>
                 </tr>
@@ -672,7 +697,7 @@
     </div>
   </main>
 
-  <!-- MODAL SISWA -->
+  <!-- MODAL SISWA (TAMBAH / EDIT) -->
   <div id="modal-siswa" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border space-y-4">
       <div class="flex justify-between items-center pb-3 border-b"><h3 id="modal-siswa-title" class="font-bold text-slate-800 text-lg">Tambah Siswa</h3><button onclick="closeSiswaModal()"><i class="fa-solid fa-xmark text-lg"></i></button></div>
@@ -680,6 +705,14 @@
         <div><label class="block text-xs font-bold uppercase mb-1">NISN</label><input type="text" id="form-nisn" required class="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm font-semibold"></div>
         <div><label class="block text-xs font-bold uppercase mb-1">Nama Lengkap</label><input type="text" id="form-nama" required class="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm font-semibold"></div>
         <div><label class="block text-xs font-bold uppercase mb-1">Kelas</label><select id="form-kelas" required class="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm font-semibold"></select></div>
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Jenis Kelamin</label>
+          <select id="form-jk" class="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm font-semibold">
+            <option value="L">Laki-laki (L)</option>
+            <option value="P">Perempuan (P)</option>
+          </select>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">No HP / WA</label><input type="text" id="form-nohp" placeholder="Contoh: 081234567890" class="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm font-semibold"></div>
         <div class="pt-3 flex justify-end space-x-2"><button type="button" onclick="closeSiswaModal()" class="px-4 py-2 bg-slate-100 rounded-xl text-xs font-bold">Batal</button><button type="submit" class="px-5 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">Simpan</button></div>
       </form>
     </div>
@@ -717,6 +750,7 @@
     let currentScanMode = 'Hadir', currentJenisAbsen = 'Masuk Sekolah';
     let html5QrScanner = null, html5QrAgenda = null, isCameraActive = false, isAgendaCamActive = false;
     let selectedCameraId = null, selectedAgendaCameraId = null;
+    let currentActiveView = 'dashboard';
 
     const adminNavItems = [
       { id:'dashboard', label:'Dashboard', icon:'fa-gauge-high' },
@@ -737,8 +771,40 @@
     ];
 
     document.addEventListener("DOMContentLoaded", function () {
-      updateLiveClock(); setInterval(updateLiveClock, 1000); initApp();
+      updateLiveClock(); 
+      setInterval(updateLiveClock, 1000); 
+      initApp();
+
+      // Realtime Polling setiap 3 detik
+      setInterval(syncDataRealtime, 3000);
     });
+
+    function getTodayLocalDateStr() {
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.innerText = msg;
+      if (type === 'error') {
+        toastIcon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-lg';
+      } else {
+        toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+      }
+
+      toast.classList.remove('translate-x-full');
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+      }, 3000);
+    }
 
     async function fetchSteinSheet(sheetName) {
       try {
@@ -783,9 +849,77 @@
       } catch (err) { console.error(err); }
     }
 
-    /* ============ LOGIN SYSTEM ============ */
-    let adminUsers = [];
+    function applySchoolProfileUI() {
+      const logoSrc = schoolProfile.logoUrl && schoolProfile.logoUrl.trim() !== '' ? schoolProfile.logoUrl : DEFAULT_LOGO_SVG;
+      ['mobile-logo-img', 'drawer-logo-img', 'sidebar-logo-img'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.src = logoSrc;
+      });
+      ['mobile-school-name', 'sidebar-school-name'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.innerText = schoolProfile.namaSekolah;
+      });
+    }
 
+    function updateDashboardStats() {
+      const today = getTodayLocalDateStr();
+      const totalSiswa = students.length;
+      document.getElementById('stat-total-siswa').innerText = totalSiswa;
+
+      const todayLogs = attendanceLogs.filter(l => l.date === today);
+      const hadirCount = todayLogs.filter(l => l.status === 'Hadir').length;
+      const izinCount = todayLogs.filter(l => l.status === 'Izin' || l.status === 'Sakit').length;
+      const alpaCount = totalSiswa - (hadirCount + izinCount);
+
+      document.getElementById('stat-hadir').innerText = hadirCount;
+      document.getElementById('stat-izin').innerText = izinCount;
+      document.getElementById('stat-alpa').innerText = alpaCount < 0 ? 0 : alpaCount;
+
+      const pct = totalSiswa > 0 ? Math.round((hadirCount / totalSiswa) * 100) : 0;
+      document.getElementById('stat-hadir-pct').innerText = `${pct}% dari total`;
+
+      const recentTable = document.getElementById('dashboard-recent-table');
+      if (recentTable) {
+        const recent = attendanceLogs.slice(0, 5);
+        if (recent.length === 0) {
+          recentTable.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-slate-400">Belum ada riwayat absensi.</td></tr>`;
+        } else {
+          recentTable.innerHTML = recent.map(l => `
+            <tr class="hover:bg-slate-50">
+              <td class="px-6 py-3.5 text-xs font-medium text-slate-500">${l.time || l.timestamp || '-'}</td>
+              <td class="px-6 py-3.5 font-mono font-bold">${l.nisn}</td>
+              <td class="px-6 py-3.5 font-bold text-slate-800">${l.nama}</td>
+              <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-semibold">${l.jenisAbsen || 'Masuk'}</span></td>
+              <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-bold">${l.status}</span></td>
+              <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-semibold">${l.peran || 'Siswa'}</span></td>
+            </tr>
+          `).join('');
+        }
+      }
+    }
+
+    /* ============ REALTIME SYNC ENGINE ============ */
+    async function syncDataRealtime() {
+      try {
+        const resAbsensi = await fetchSteinSheet('Absensi');
+        if (Array.isArray(resAbsensi)) {
+          attendanceLogs = resAbsensi;
+          refreshCurrentViewData();
+        }
+      } catch (e) {
+        console.warn("Realtime sync failed:", e);
+      }
+    }
+
+    function refreshCurrentViewData() {
+      if (currentActiveView === 'dashboard') {
+        updateDashboardStats();
+      } else if (currentActiveView === 'rekap') {
+        renderRekapTable();
+      } else if (currentActiveView === 'belum') {
+        renderBelumAbsenTable();
+      }
+    }
+
+    /* ============ LOGIN SYSTEM ============ */
     function switchLoginTab(role) {
       if (role === 'admin') {
         document.getElementById('tab-login-admin').className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition";
@@ -837,6 +971,7 @@
         document.getElementById('admin-pass').value = '';
 
         document.getElementById('auth-screen').classList.add('hidden');
+        updateRoleBasedVisibility();
         renderNavMenu();
         switchView('dashboard');
         showToast("Login Admin Berhasil");
@@ -855,11 +990,24 @@
         currentUserRole = 'guru';
         currentLoggedTeacher = teacher;
         document.getElementById('auth-screen').classList.add('hidden');
+        updateRoleBasedVisibility();
         renderNavMenu();
         setupTeacherAgendaView();
         switchView('agenda');
         showToast(`Selamat Datang, ${teacher.nama}`);
       } else { alert("Username / NIP atau Password Guru salah!"); }
+    }
+
+    function updateRoleBasedVisibility() {
+      // Sembunyikan/Tampilkan filter spesifik Admin
+      const adminFilters = document.querySelectorAll('.admin-only-filter');
+      adminFilters.forEach(el => {
+        if (currentUserRole === 'guru') {
+          el.classList.add('hidden');
+        } else {
+          el.classList.remove('hidden');
+        }
+      });
     }
 
     function logoutApp() {
@@ -882,6 +1030,7 @@
     }
 
     function switchView(viewId) {
+      currentActiveView = viewId;
       if (viewId !== 'scan' && isCameraActive) stopCamera();
       if (viewId !== 'agenda' && isAgendaCamActive) stopCameraAgenda();
       document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
@@ -934,7 +1083,6 @@
     /* ============ KAMERA AGENDA & UMUM ============ */
     let isScanProcessing = false;
 
-    // --- FITUR SELEKSI PERANGKAT KAMERA (GURU & ADMIN) ---
     async function populateCameraDevices(selectElemId, currentSelectedId) {
       try {
         const devices = await Html5Qrcode.getCameras();
@@ -984,7 +1132,6 @@
       }
     }
 
-    // 1. KAMERA AGENDA
     async function toggleCameraAgenda() {
       if (isAgendaCamActive) { 
         await stopCameraAgenda(); 
@@ -1047,11 +1194,11 @@
         showToast(`Peringatan: Siswa dari kelas ${student.kelas} (Bukan kelas ${targetKelas})`, "error");
         return;
       }
-      const jamPelajaran = document.getElementById('agenda-jampel').value || 'Jam Pelajaran Umum';
-      const mapelName = document.getElementById('agenda-mapel').value;
-      const sessionName = `${mapelName} (${jamPelajaran})`;
       
-      recordAttendanceDirect(nisn, student.nama, student.kelas, 'Hadir', sessionName);
+      const mapelName = document.getElementById('agenda-mapel').value || currentLoggedTeacher?.jabatan || 'Pelajaran';
+      
+      // Menggunakan Nama Mapel sebagai jenis absensi utama
+      recordAttendanceDirect(nisn, student.nama, student.kelas, 'Hadir', mapelName, 'Siswa');
     }
 
     function handleAgendaManualScan() {
@@ -1059,8 +1206,7 @@
       if (val) { processAgendaScan(val); document.getElementById('agenda-manual-nisn').value = ''; }
     }
 
-    // 2. FUNGSI EKSEKUSI ABSENSI
-    async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
+    async function recordAttendanceDirect(nisn, nama, kelas, status, jenis, peran = 'Siswa') {
       if (isScanProcessing) return;
       isScanProcessing = true;
 
@@ -1086,7 +1232,7 @@
           const logEntry = {
             timestamp: `${dateStr} ${now.toLocaleTimeString('id-ID')}`,
             date: dateStr, time: now.toLocaleTimeString('id-ID'),
-            nisn, nama, kelas, jenisAbsen: jenis, status, peran: 'Siswa', method: 'Agenda Guru',
+            nisn, nama, kelas, jenisAbsen: jenis, status, peran: peran, method: 'Scan System',
             guruNip: currentLoggedTeacher ? currentLoggedTeacher.nip : ''
           };
 
@@ -1098,6 +1244,7 @@
           }
           showToast(`✅ Absen ${nama} tercatat`);
           await postSteinSheet('Absensi', [logEntry]);
+          refreshCurrentViewData();
         }
       } catch (err) {
         console.error("Error catat absensi:", err);
@@ -1108,7 +1255,6 @@
       }
     }
 
-    // 3. KAMERA GENERAL / SCAN ADMIN
     async function toggleCamera() { 
       if (isCameraActive) await stopCamera(); else await startCamera(); 
     }
@@ -1152,8 +1298,18 @@
 
     function processAttendanceScan(idCode) {
       const student = students.find(s => String(s.nisn) === String(idCode));
-      if (!student) { showToast("Siswa tidak terdaftar", "error"); return; }
-      recordAttendanceDirect(student.nisn, student.nama, student.kelas, currentScanMode, currentJenisAbsen);
+      if (student) {
+        recordAttendanceDirect(student.nisn, student.nama, student.kelas, currentScanMode, currentJenisAbsen, 'Siswa');
+        return;
+      }
+      
+      const teacher = teachers.find(t => String(t.nip) === String(idCode));
+      if (teacher) {
+        recordAttendanceDirect(teacher.nip, teacher.nama, 'Guru/Staf', currentScanMode, currentJenisAbsen, 'Guru');
+        return;
+      }
+
+      showToast("ID / QR Code tidak terdaftar dalam sistem", "error");
     }
 
     function handleManualInput(e) {
@@ -1224,14 +1380,12 @@
 
         const cardHtml = `
           <div class="kts-card">
-            <!-- Header Kartu -->
             <div class="card-header ${item.headerClass}">
               <img src="${logoSrc}" alt="Logo" class="logo">
               <h2>${schoolProfile.namaSekolah}</h2>
               <div class="badge-title">${item.badgeTitle}</div>
             </div>
 
-            <!-- Body Kartu -->
             <div class="card-body">
               <div class="photo-frame">
                 <img src="${item.foto}" alt="${item.nama}" onerror="this.src='${DEFAULT_AVATAR_SVG}'">
@@ -1241,13 +1395,11 @@
               <div class="user-id">${item.idLabel}: <span>${item.id}</span></div>
               ${infoBadgeHtml}
 
-              <!-- Area QR Code -->
               <div class="qr-section">
                 <div id="${cardContainerId}"></div>
               </div>
             </div>
 
-            <!-- Footer Kartu -->
             <div class="card-footer">
               <span>NPSN: ${schoolProfile.npsn || '20247282'}</span>
               <span>QR SYSTEM</span>
@@ -1273,19 +1425,31 @@
       });
     }
 
-    /* ============ REKAP & SHARE WA ============ */
-    function renderRekapTable() {
-      const tbody = document.getElementById('rekap-table-body');
-      if (!tbody) return;
+    /* ============ REKAP, SHARE WA & EKSPOR EXCEL ============ */
+    function getFilteredRekapData() {
       const dateFilter = document.getElementById('rekap-date-filter')?.value || getTodayLocalDateStr();
       const nameSearch = document.getElementById('rekap-name-search')?.value.toLowerCase() || "";
       const classFilter = document.getElementById('rekap-class-filter')?.value || "ALL";
+      
+      const roleFilter = currentUserRole === 'admin' ? (document.getElementById('rekap-role-filter')?.value || "ALL") : "Siswa";
+      const sessionFilter = currentUserRole === 'admin' ? (document.getElementById('rekap-session-filter')?.value || "ALL") : "ALL";
 
-      const filtered = attendanceLogs.filter(l => {
+      return attendanceLogs.filter(l => {
         const mDate = !dateFilter || l.date === dateFilter;
         const mName = !nameSearch || l.nama.toLowerCase().includes(nameSearch) || String(l.nisn).includes(nameSearch);
         const mClass = classFilter === 'ALL' || l.kelas === classFilter;
         
+        let mRole = true;
+        if (roleFilter !== 'ALL') {
+          const itemPeran = l.peran || 'Siswa';
+          mRole = itemPeran.toLowerCase() === roleFilter.toLowerCase();
+        }
+
+        let mSession = true;
+        if (sessionFilter !== 'ALL') {
+          mSession = l.jenisAbsen && l.jenisAbsen.toLowerCase().includes(sessionFilter.toLowerCase());
+        }
+
         let mTeacher = true;
         if (currentUserRole === 'guru' && currentLoggedTeacher) {
           const teacherMapel = currentLoggedTeacher.jabatan || '';
@@ -1294,11 +1458,18 @@
           mTeacher = matchesTeacherClass && matchesTeacherMapel;
         }
 
-        return mDate && mName && mClass && mTeacher;
+        return mDate && mName && mClass && mRole && mSession && mTeacher;
       });
+    }
+
+    function renderRekapTable() {
+      const tbody = document.getElementById('rekap-table-body');
+      if (!tbody) return;
+      
+      const filtered = getFilteredRekapData();
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Tidak ada data rekap absensi.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Tidak ada data rekap absensi.</td></tr>`;
         return;
       }
 
@@ -1307,6 +1478,7 @@
           <td class="px-6 py-3.5 text-xs">${l.timestamp || '-'}</td>
           <td class="px-6 py-3.5 font-mono font-bold">${l.nisn}</td>
           <td class="px-6 py-3.5 font-bold text-slate-800">${l.nama}</td>
+          <td class="px-6 py-3.5"><span class="px-2 py-0.5 ${l.peran === 'Guru' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'} rounded text-xs font-semibold">${l.peran || 'Siswa'}</span></td>
           <td class="px-6 py-3.5">${l.kelas}</td>
           <td class="px-6 py-3.5"><span class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-bold">${l.jenisAbsen || 'Masuk'}</span></td>
           <td class="px-6 py-3.5"><span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded text-xs font-bold">${l.status}</span></td>
@@ -1318,16 +1490,7 @@
       const dateFilter = document.getElementById('rekap-date-filter')?.value || getTodayLocalDateStr();
       const classFilter = document.getElementById('rekap-class-filter')?.value || "ALL";
       
-      const filtered = attendanceLogs.filter(l => {
-        const matchDate = l.date === dateFilter;
-        const matchClass = classFilter === 'ALL' || l.kelas === classFilter;
-        let matchTeacher = true;
-        if (currentUserRole === 'guru' && currentLoggedTeacher) {
-          const teacherMapel = currentLoggedTeacher.jabatan || '';
-          matchTeacher = (currentLoggedTeacher.kelas === 'Semua' || l.kelas === currentLoggedTeacher.kelas) && (l.jenisAbsen ? l.jenisAbsen.includes(teacherMapel) : true);
-        }
-        return matchDate && matchClass && matchTeacher;
-      });
+      const filtered = getFilteredRekapData();
 
       const jamInfo = document.getElementById('agenda-jampel')?.value || '-';
       const mapelInfo = currentUserRole === 'guru' ? (currentLoggedTeacher?.jabatan || '-') : 'Umum';
@@ -1344,12 +1507,39 @@
         textMsg += `_Belum ada data absensi tercatat pada filter ini._`;
       } else {
         filtered.forEach((l, idx) => {
-          textMsg += `${idx + 1}. *${l.nama}* (${l.kelas}) - Status: *${l.status}* [${l.jenisAbsen || 'Umum'}]\n`;
+          textMsg += `${idx + 1}. *${l.nama}* (${l.peran || 'Siswa'} - ${l.kelas}) - Status: *${l.status}* [${l.jenisAbsen || 'Umum'}]\n`;
         });
       }
 
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`;
       window.open(waUrl, '_blank');
+    }
+
+    function exportRekapExcel() {
+      const filtered = getFilteredRekapData();
+      if (filtered.length === 0) {
+        showToast("Tidak ada data rekap untuk diekspor!", "error");
+        return;
+      }
+
+      const dataToExport = filtered.map((l, idx) => ({
+        'No': idx + 1,
+        'Waktu / Tanggal': l.timestamp || l.date || '-',
+        'NISN / ID': l.nisn,
+        'Nama': l.nama,
+        'Peran': l.peran || 'Siswa',
+        'Kelas': l.kelas,
+        'Jenis / Sesi': l.jenisAbsen || 'Masuk Sekolah',
+        'Status': l.status
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Absensi");
+      
+      const dateFilter = document.getElementById('rekap-date-filter')?.value || getTodayLocalDateStr();
+      XLSX.writeFile(workbook, `Rekap_Absensi_${dateFilter}.xlsx`);
+      showToast("Berhasil Mengunduh Rekap Absensi Excel!");
     }
 
     /* ============ BELUM ABSEN & AKSI MANUAL ============ */
@@ -1361,58 +1551,87 @@
       const classFilter = document.getElementById('belum-class-filter')?.value || "ALL";
       const nameSearch = document.getElementById('belum-name-search')?.value.toLowerCase() || "";
 
-      let targetClass = classFilter;
-      if (currentUserRole === 'guru' && currentLoggedTeacher) {
-        targetClass = currentLoggedTeacher.kelas === 'Semua' ? classFilter : currentLoggedTeacher.kelas;
+      const roleFilter = currentUserRole === 'admin' ? (document.getElementById('belum-role-filter')?.value || "ALL") : "Siswa";
+      const sessionFilter = currentUserRole === 'admin' ? (document.getElementById('belum-session-filter')?.value || "Masuk Sekolah") : (currentLoggedTeacher?.jabatan || "Pelajaran");
+
+      let listEntity = [];
+
+      if (roleFilter === 'ALL' || roleFilter === 'Siswa') {
+        let targetClass = classFilter;
+        if (currentUserRole === 'guru' && currentLoggedTeacher) {
+          targetClass = currentLoggedTeacher.kelas === 'Semua' ? classFilter : currentLoggedTeacher.kelas;
+        }
+
+        const filteredStudents = students.filter(s => {
+          const matchClass = targetClass === 'ALL' || targetClass === 'Semua' || s.kelas === targetClass;
+          const matchName = !nameSearch || s.nama.toLowerCase().includes(nameSearch) || String(s.nisn).includes(nameSearch);
+          return matchClass && matchName;
+        }).map(s => ({ ...s, id: s.nisn, peran: 'Siswa' }));
+
+        listEntity.push(...filteredStudents);
       }
 
-      const studentsInClass = students.filter(s => {
-        const matchClass = targetClass === 'ALL' || targetClass === 'Semua' || s.kelas === targetClass;
-        const matchName = !nameSearch || s.nama.toLowerCase().includes(nameSearch) || String(s.nisn).includes(nameSearch);
-        return matchClass && matchName;
-      });
+      if (roleFilter === 'ALL' || roleFilter === 'Guru') {
+        const filteredTeachers = teachers.filter(t => {
+          const matchName = !nameSearch || t.nama.toLowerCase().includes(nameSearch) || String(t.nip).includes(nameSearch);
+          return matchName;
+        }).map(t => ({ ...t, id: t.nip, kelas: t.kelas || 'Guru/Staf', peran: 'Guru' }));
 
-      const teacherMapel = currentUserRole === 'guru' ? (currentLoggedTeacher?.jabatan || '') : '';
-      const attendedNisn = new Set(attendanceLogs.filter(l => {
+        listEntity.push(...filteredTeachers);
+      }
+
+      const attendedIds = new Set(attendanceLogs.filter(l => {
         const matchDate = l.date === dateFilter;
-        let matchMapelOrType = true;
-        if (currentUserRole === 'guru') {
-          matchMapelOrType = l.jenisAbsen ? l.jenisAbsen.includes(teacherMapel) : true;
-        } else {
-          matchMapelOrType = l.jenisAbsen === 'Masuk Sekolah';
-        }
-        return matchDate && matchMapelOrType;
+        const matchSession = l.jenisAbsen && l.jenisAbsen.toLowerCase().includes(sessionFilter.toLowerCase());
+        return matchDate && matchSession;
       }).map(l => String(l.nisn)));
 
-      const notYet = studentsInClass.filter(s => !attendedNisn.has(String(s.nisn)));
+      const notYet = listEntity.filter(item => !attendedIds.has(String(item.id)));
 
       if (notYet.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Semua siswa sudah melakukan absensi!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Semua data pada filter ini sudah melakukan absensi!</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = notYet.map(s => `
+      tbody.innerHTML = notYet.map(item => `
         <tr class="hover:bg-slate-50 border-b">
-          <td class="px-6 py-3.5 font-mono font-bold">${s.nisn}</td>
-          <td class="px-6 py-3.5 font-bold text-slate-800">${s.nama}</td>
-          <td class="px-6 py-3.5">${s.kelas}</td>
+          <td class="px-6 py-3.5 font-mono font-bold">${item.id}</td>
+          <td class="px-6 py-3.5 font-bold text-slate-800">${item.nama}</td>
+          <td class="px-6 py-3.5"><span class="px-2 py-0.5 ${item.peran === 'Guru' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'} rounded text-xs font-semibold">${item.peran}</span></td>
+          <td class="px-6 py-3.5">${item.kelas}</td>
           <td class="px-6 py-3.5 text-center space-x-1">
-            <button onclick="manualSetStatus('${s.nisn}', 'Hadir')" class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded text-xs hover:bg-emerald-200">Hadir</button>
-            <button onclick="manualSetStatus('${s.nisn}', 'Izin')" class="px-2.5 py-1 bg-sky-100 text-sky-700 font-bold rounded text-xs hover:bg-sky-200">Izin</button>
-            <button onclick="manualSetStatus('${s.nisn}', 'Sakit')" class="px-2.5 py-1 bg-amber-100 text-amber-700 font-bold rounded text-xs hover:bg-amber-200">Sakit</button>
-            <button onclick="manualSetStatus('${s.nisn}', 'Alfa')" class="px-2.5 py-1 bg-rose-100 text-rose-700 font-bold rounded text-xs hover:bg-rose-200">Alfa</button>
+            <button onclick="manualSetStatus('${item.id}', 'Hadir', '${item.peran}')" class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded text-xs hover:bg-emerald-200">Hadir</button>
+            <button onclick="manualSetStatus('${item.id}', 'Izin', '${item.peran}')" class="px-2.5 py-1 bg-sky-100 text-sky-700 font-bold rounded text-xs hover:bg-sky-200">Izin</button>
+            <button onclick="manualSetStatus('${item.id}', 'Sakit', '${item.peran}')" class="px-2.5 py-1 bg-amber-100 text-amber-700 font-bold rounded text-xs hover:bg-amber-200">Sakit</button>
+            <button onclick="manualSetStatus('${item.id}', 'Alfa', '${item.peran}')" class="px-2.5 py-1 bg-rose-100 text-rose-700 font-bold rounded text-xs hover:bg-rose-200">Alfa</button>
           </td>
         </tr>
       `).join('');
     }
 
-    async function manualSetStatus(nisn, status) {
-      const student = students.find(s => String(s.nisn) === String(nisn));
-      if (!student) return;
-      const sessionLabel = currentUserRole === 'guru' ? `${currentLoggedTeacher.jabatan} (Manual)` : 'Masuk Sekolah';
-      await recordAttendanceDirect(student.nisn, student.nama, student.kelas, status, sessionLabel);
-      renderBelumAbsenTable();
-      renderRekapTable();
+    async function manualSetStatus(id, status, peran = 'Siswa') {
+      const sessionLabel = currentUserRole === 'admin' ? (document.getElementById('belum-session-filter')?.value || 'Masuk Sekolah') : (currentLoggedTeacher?.jabatan || 'Pelajaran');
+      let nama = '', kelas = '';
+
+      if (peran === 'Guru') {
+        const teacher = teachers.find(t => String(t.nip) === String(id));
+        if (teacher) {
+          nama = teacher.nama;
+          kelas = teacher.kelas || 'Guru/Staf';
+        }
+      } else {
+        const student = students.find(s => String(s.nisn) === String(id));
+        if (student) {
+          nama = student.nama;
+          kelas = student.kelas;
+        }
+      }
+
+      if (nama) {
+        await recordAttendanceDirect(id, nama, kelas, status, sessionLabel, peran);
+        renderBelumAbsenTable();
+        renderRekapTable();
+      }
     }
 
     /* ============ KELOLA GURU ============ */
@@ -1517,13 +1736,29 @@
       if (guruKelasEl) {
         guruKelasEl.innerHTML = `<option value="Semua">Semua Kelas</option>` + classList.map(k => `<option value="${k}">${k}</option>`).join('');
       }
-      renderGuruTable(); renderSiswaTable();
+      renderGuruTable(); renderSiswaTable(); renderKelasTable();
     }
 
+    /* ============ KELOLA DATA SISWA (TAMBAH, EDIT, HAPUS) ============ */
     function renderSiswaTable() {
       const tbody = document.getElementById('siswa-table-body');
       if (!tbody) return;
-      tbody.innerHTML = students.map(s => `
+
+      const searchVal = document.getElementById('siswa-search')?.value.toLowerCase() || '';
+      const classVal = document.getElementById('siswa-class-filter')?.value || 'ALL';
+
+      const filtered = students.filter(s => {
+        const matchSearch = !searchVal || String(s.nisn).toLowerCase().includes(searchVal) || (s.nama && s.nama.toLowerCase().includes(searchVal));
+        const matchClass = classVal === 'ALL' || s.kelas === classVal;
+        return matchSearch && matchClass;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Tidak ada data siswa.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(s => `
         <tr class="hover:bg-slate-50 border-b">
           <td class="px-6 py-2"><img src="${s.fotoUrl && s.fotoUrl.trim() !== '' ? s.fotoUrl : DEFAULT_AVATAR_SVG}" class="w-9 h-9 rounded-full object-cover border" onerror="this.src='${DEFAULT_AVATAR_SVG}'"></td>
           <td class="px-6 py-3.5 font-mono font-bold">${s.nisn}</td>
@@ -1531,125 +1766,183 @@
           <td class="px-6 py-3.5">${s.kelas}</td>
           <td class="px-6 py-3.5">${s.jk || 'L'}</td>
           <td class="px-6 py-3.5 text-xs">${s.nohp || '-'}</td>
-          <td class="px-6 py-3.5 text-right"><button onclick="deleteSiswa('${s.nisn}')" class="text-rose-600 font-bold text-xs"><i class="fa-solid fa-trash"></i></button></td>
+          <td class="px-6 py-3.5 text-right space-x-2">
+            <button onclick="openEditSiswaModal('${s.nisn}')" class="text-indigo-600 hover:text-indigo-800 font-bold text-xs" title="Edit Siswa"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deleteSiswa('${s.nisn}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs" title="Hapus Siswa"><i class="fa-solid fa-trash"></i></button>
+          </td>
         </tr>
       `).join('');
     }
 
-    async function deleteSiswa(nisn) {
-      if (confirm("Hapus siswa?")) {
-        students = students.filter(s => s.nisn !== nisn);
-        renderSiswaTable();
-        await deleteSteinSheet('Siswa', { nisn });
-      }
+    function filterSiswaTable() { renderSiswaTable(); }
+
+    function openAddSiswaModal() {
+      document.getElementById('modal-siswa-title').innerText = "Tambah Siswa Baru";
+      document.getElementById('form-nisn').value = '';
+      document.getElementById('form-nisn').removeAttribute('readonly');
+      document.getElementById('form-nama').value = '';
+      if (classList.length > 0) document.getElementById('form-kelas').value = classList[0];
+      document.getElementById('form-jk').value = 'L';
+      document.getElementById('form-nohp').value = '';
+      document.getElementById('modal-siswa').classList.remove('hidden');
     }
 
-    function filterSiswaTable() { renderSiswaTable(); }
-    function filterGuruTable() { renderGuruTable(); }
-    function openAddSiswaModal() { document.getElementById('modal-siswa').classList.remove('hidden'); }
+    function openEditSiswaModal(nisn) {
+      const s = students.find(item => String(item.nisn) === String(nisn));
+      if (!s) return;
+      document.getElementById('modal-siswa-title').innerText = "Edit Data Siswa";
+      document.getElementById('form-nisn').value = s.nisn;
+      document.getElementById('form-nisn').setAttribute('readonly', true);
+      document.getElementById('form-nama').value = s.nama || '';
+      document.getElementById('form-kelas').value = s.kelas || classList[0];
+      document.getElementById('form-jk').value = s.jk || 'L';
+      document.getElementById('form-nohp').value = s.nohp || '';
+      document.getElementById('modal-siswa').classList.remove('hidden');
+    }
+
     function closeSiswaModal() { document.getElementById('modal-siswa').classList.add('hidden'); }
 
     async function saveSiswaForm(e) {
       e.preventDefault();
-      const s = {
-        nisn: document.getElementById('form-nisn').value.trim(),
+      const nisnVal = document.getElementById('form-nisn').value.trim();
+      const existingIndex = students.findIndex(s => String(s.nisn) === String(nisnVal));
+      const existingFoto = existingIndex >= 0 ? (students[existingIndex].fotoUrl || '') : '';
+
+      const siswaObj = {
+        nisn: nisnVal,
         nama: document.getElementById('form-nama').value.trim(),
-        kelas: document.getElementById('form-kelas').value
+        kelas: document.getElementById('form-kelas').value,
+        jk: document.getElementById('form-jk').value,
+        nohp: document.getElementById('form-nohp').value.trim(),
+        fotoUrl: existingFoto
       };
-      students.push(s);
-      await postSteinSheet('Siswa', [s]);
-      renderSiswaTable(); closeSiswaModal(); showToast("Siswa Disimpan");
+
+      if (existingIndex >= 0) {
+        students[existingIndex] = siswaObj;
+        await putSteinSheet('Siswa', { nisn: nisnVal }, siswaObj);
+        showToast("Data Siswa Berhasil Diperbarui");
+      } else {
+        students.push(siswaObj);
+        await postSteinSheet('Siswa', [siswaObj]);
+        showToast("Siswa Baru Berhasil Disimpan");
+      }
+      renderSiswaTable(); closeSiswaModal(); updateDashboardStats();
     }
 
+    async function deleteSiswa(nisn) {
+      if (confirm("Apakah Anda yakin ingin menghapus siswa ini?")) {
+        students = students.filter(s => String(s.nisn) !== String(nisn));
+        renderSiswaTable();
+        await deleteSteinSheet('Siswa', { nisn });
+        showToast("Siswa berhasil dihapus");
+        updateDashboardStats();
+      }
+    }
+
+    /* ============ KELOLA KELAS ============ */
     function renderKelasTable() {
       const tbody = document.getElementById('kelas-table-body');
+      const badge = document.getElementById('badge-total-kelas');
+      if (badge) badge.innerText = `${classList.length} Kelas`;
       if (!tbody) return;
-      tbody.innerHTML = classList.map(k => `<tr class="border-b"><td class="px-6 py-3 font-bold">${k}</td></tr>`).join('');
+
+      if (classList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" class="p-6 text-center text-slate-400">Belum ada data kelas.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = classList.map((k, index) => `
+        <tr class="hover:bg-slate-50 border-b">
+          <td class="px-6 py-3.5 font-bold text-slate-800">${k}</td>
+          <td class="px-6 py-3.5 text-right">
+            <button onclick="deleteKelas('${k}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
+          </td>
+        </tr>
+      `).join('');
     }
 
     async function handleSaveKelas(e) {
       e.preventDefault();
-      const val = document.getElementById('input-nama-kelas').value.trim();
-      if (val) { classList.push(val); renderKelasTable(); updateAllDropdowns(); await postSteinSheet('Kelas', [{ nama: val }]); }
+      const namaVal = document.getElementById('input-nama-kelas').value.trim();
+      if (!namaVal) return;
+      if (classList.includes(namaVal)) {
+        showToast("Kelas sudah ada!", "error"); return;
+      }
+      classList.push(namaVal);
+      document.getElementById('input-nama-kelas').value = '';
+      updateAllDropdowns();
+      await postSteinSheet('Kelas', [{ nama: namaVal }]);
+      showToast("Kelas berhasil ditambahkan");
     }
 
+    async function deleteKelas(nama) {
+      if (confirm(`Apakah Anda yakin ingin menghapus kelas "${nama}"?`)) {
+        classList = classList.filter(k => k !== nama);
+        updateAllDropdowns();
+        await deleteSteinSheet('Kelas', { nama });
+        showToast("Kelas berhasil dihapus");
+      }
+    }
+
+    /* ============ PROFIL SEKOLAH ============ */
     async function saveSchoolProfileForm(e) {
       e.preventDefault();
-      schoolProfile.namaSekolah = document.getElementById('profil-nama-sekolah').value;
-      schoolProfile.npsn = document.getElementById('profil-npsn').value;
-      schoolProfile.alamat = document.getElementById('profil-alamat').value;
-      schoolProfile.logoUrl = document.getElementById('profil-logo-url').value;
-      applySchoolProfileUI(); showToast("Profil Disimpan");
+      schoolProfile.namaSekolah = document.getElementById('profil-nama-sekolah').value.trim();
+      schoolProfile.npsn = document.getElementById('profil-npsn').value.trim();
+      schoolProfile.logoUrl = document.getElementById('profil-logo-url').value.trim();
+      schoolProfile.alamat = document.getElementById('profil-alamat').value.trim();
+
+      applySchoolProfileUI();
+      await putSteinSheet('Pengaturan', { id: '1' }, schoolProfile);
+      showToast("Profil Sekolah Berhasil Disimpan!");
     }
 
-    function applySchoolProfileUI() {
-      const logoSrc = schoolProfile.logoUrl && schoolProfile.logoUrl.trim() !== '' ? schoolProfile.logoUrl : DEFAULT_LOGO_SVG;
-      
-      document.getElementById('mobile-school-name').innerText = schoolProfile.namaSekolah;
-      document.getElementById('sidebar-school-name').innerText = schoolProfile.namaSekolah;
-      
-      const mobileLogo = document.getElementById('mobile-logo-img');
-      const drawerLogo = document.getElementById('drawer-logo-img');
-      const sidebarLogo = document.getElementById('sidebar-logo-img');
-      
-      if (mobileLogo) mobileLogo.src = logoSrc;
-      if (drawerLogo) drawerLogo.src = logoSrc;
-      if (sidebarLogo) sidebarLogo.src = logoSrc;
-
-      document.getElementById('profil-nama-sekolah').value = schoolProfile.namaSekolah;
-      document.getElementById('profil-npsn').value = schoolProfile.npsn;
-      document.getElementById('profil-alamat').value = schoolProfile.alamat;
-      const logoInput = document.getElementById('profil-logo-url');
-      if (logoInput) logoInput.value = schoolProfile.logoUrl || '';
-    }
-
-    function getTodayLocalDateStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
-
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      document.getElementById('toast-message').innerText = msg;
-      t.classList.remove('translate-x-full');
-      setTimeout(() => t.classList.add('translate-x-full'), 3000);
-    }
-
-    function updateDashboardStats() {
-      const total = students.length + teachers.length;
-      const todayStr = getTodayLocalDateStr();
-      const todayLogs = attendanceLogs.filter(l => l.date === todayStr);
-      
-      const hadirCount = todayLogs.filter(l => l.status === 'Hadir').length;
-      const izinCount = todayLogs.filter(l => l.status === 'Izin' || l.status === 'Sakit').length;
-      const alpaCount = total - (hadirCount + izinCount);
-
-      document.getElementById('stat-total-siswa').innerText = total;
-      document.getElementById('stat-hadir').innerText = hadirCount;
-      document.getElementById('stat-izin').innerText = izinCount;
-      document.getElementById('stat-alpa').innerText = alpaCount > 0 ? alpaCount : 0;
-
-      const pct = total > 0 ? Math.round((hadirCount / total) * 100) : 0;
-      document.getElementById('stat-hadir-pct').innerText = `${pct}% dari total`;
-
-      const tbody = document.getElementById('dashboard-recent-table');
-      if (tbody) {
-        const recentLogs = attendanceLogs.slice(0, 5);
-        if (recentLogs.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Belum ada aktivitas absensi.</td></tr>`;
-        } else {
-          tbody.innerHTML = recentLogs.map(l => `
-            <tr class="hover:bg-slate-50 border-b">
-              <td class="px-6 py-3 text-xs">${l.time || '-'}</td>
-              <td class="px-6 py-3 font-mono font-bold text-xs">${l.nisn}</td>
-              <td class="px-6 py-3 font-bold text-slate-800 text-xs">${l.nama}</td>
-              <td class="px-6 py-3 text-xs"><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded font-bold">${l.jenisAbsen || 'Masuk'}</span></td>
-              <td class="px-6 py-3 text-xs"><span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold">${l.status}</span></td>
-              <td class="px-6 py-3 text-xs">${l.peran || 'Siswa'}</td>
-            </tr>
-          `).join('');
-        }
+    /* ============ IMPORT & TEMPLATE EXCEL ============ */
+    function downloadExcelTemplate(type) {
+      let data = [];
+      if (type === 'siswa') {
+        data = [{ 'nisn': '1234567890', 'nama': 'Siswa Contoh', 'kelas': 'X IPA 1', 'jk': 'L', 'nohp': '081234567890' }];
       }
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Template");
+      XLSX.writeFile(workbook, `Template_Import_${type}.xlsx`);
+    }
+
+    function importExcelData(e, type) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function (evt) {
+        try {
+          const data = new Uint8Array(evt.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.SheetNames[0];
+          const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
+
+          if (type === 'siswa') {
+            const imported = rows.map(r => ({
+              nisn: String(r.nisn || r.NISN || '').trim(),
+              nama: String(r.nama || r.NAMA || '').trim(),
+              kelas: String(r.kelas || r.KELAS || classList[0] || '').trim(),
+              jk: String(r.jk || r.JK || 'L').toUpperCase().trim(),
+              nohp: String(r.nohp || r.NOHP || '').trim(),
+              fotoUrl: ''
+            })).filter(s => s.nisn && s.nama);
+
+            if (imported.length > 0) {
+              students.push(...imported);
+              await postSteinSheet('Siswa', imported);
+              renderSiswaTable(); updateDashboardStats();
+              showToast(`Berhasil mengimpor ${imported.length} data siswa!`);
+            }
+          }
+        } catch (err) {
+          showToast("Gagal mengimpor file Excel", "error");
+        }
+      };
+      reader.readAsArrayBuffer(file);
     }
   </script>
 </body>
