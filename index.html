@@ -969,24 +969,38 @@ async function handleLoginAdmin(e) {
     /* ============ KAMERA AGENDA & UMUM ============ */
 let isScanProcessing = false; // Flag jeda/cooldown agar tidak scan ganda beruntun
 
+// Status Facing Mode Kamera ('environment' = belakang, 'user' = depan)
+let mainFacingMode = "environment";
+let agendaFacingMode = "environment";
+
+/* --- KAMERA AGENDA KELAS --- */
 async function toggleCameraAgenda() {
-  if (isAgendaCamActive) { await stopCameraAgenda(); } else { await startCameraAgenda(); }
+  if (isAgendaCamActive) { 
+    await stopCameraAgenda(); 
+  } else { 
+    await startCameraAgenda(); 
+  }
 }
 
-// 1. Kamera Agenda (Paksa Kamera Belakang)
 async function startCameraAgenda() {
   try {
     document.getElementById('qr-placeholder-agenda').style.display = 'none';
     if (!html5QrAgenda) html5QrAgenda = new Html5Qrcode("qr-reader-agenda");
-    
-    // Menggunakan facingMode: "environment" untuk memaksa Kamera Belakang HP
+
+    // Jalankan kamera sesuai facing mode yang aktif (depan / belakang)
     await html5QrAgenda.start(
-      { facingMode: "environment" }, 
+      { facingMode: agendaFacingMode }, 
       { fps: 10, qrbox: { width: 200, height: 200 } }, 
       (txt) => processAgendaScan(txt), 
       () => {}
     );
+
     isAgendaCamActive = true;
+    
+    // Ubah Teks Tombol Kamera Agenda
+    const btnTextAgenda = document.getElementById('camera-agenda-btn-text');
+    if (btnTextAgenda) btnTextAgenda.innerText = "Matikan Kamera";
+
   } catch (e) { 
     console.error(e);
     alert("Gagal menyalakan kamera agenda. Pastikan izin kamera telah diberikan."); 
@@ -998,6 +1012,20 @@ async function stopCameraAgenda() {
     await html5QrAgenda.stop();
     isAgendaCamActive = false;
     document.getElementById('qr-placeholder-agenda').style.display = 'block';
+
+    // Ubah Kembali Teks Tombol Kamera Agenda
+    const btnTextAgenda = document.getElementById('camera-agenda-btn-text');
+    if (btnTextAgenda) btnTextAgenda.innerText = "Nyalakan Kamera";
+  }
+}
+
+// Fungsi untuk berganti kamera Depan <-> Belakang pada Agenda
+async function switchCameraAgenda() {
+  agendaFacingMode = (agendaFacingMode === "environment") ? "user" : "environment";
+  showToast(`Kamera Agenda diganti ke: ${agendaFacingMode === "environment" ? "Belakang" : "Depan"}`);
+  if (isAgendaCamActive) {
+    await stopCameraAgenda();
+    await startCameraAgenda();
   }
 }
 
@@ -1013,7 +1041,7 @@ function processAgendaScan(nisnRaw) {
   const nisn = String(nisnRaw).trim();
   const student = students.find(s => String(s.nisn).trim() === nisn);
   if (!student) { showToast("Siswa tidak ditemukan", "error"); return; }
-  
+
   const targetKelas = getActiveTeacherClass();
   if (targetKelas !== 'Semua' && student.kelas !== targetKelas) {
     showToast(`Peringatan: Siswa dari kelas ${student.kelas} (Bukan kelas ${targetKelas})`, "error");
@@ -1022,7 +1050,7 @@ function processAgendaScan(nisnRaw) {
   const jamPelajaran = document.getElementById('agenda-jampel').value || 'Jam Pelajaran Umum';
   const mapelName = document.getElementById('agenda-mapel').value;
   const sessionName = `${mapelName} (${jamPelajaran})`;
-  
+
   recordAttendanceDirect(nisn, student.nama, student.kelas, 'Hadir', sessionName);
 }
 
@@ -1031,17 +1059,17 @@ function handleAgendaManualScan() {
   if (val) { processAgendaScan(val); document.getElementById('agenda-manual-nisn').value = ''; }
 }
 
-// 2. Fungsi Eksekusi Absensi (Mencegah Duplikat & Jeda 3 Detik)
+
+/* --- PROSES SIMPAN ABSENSI & ANTI DUPLIKAT --- */
 async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
-  // Jika sedang dalam masa jeda 3 detik, abaikan scan berturut-turut
-  if (isScanProcessing) return;
+  if (isScanProcessing) return; // Mengabaikan scan jika dalam jeda 3 detik
   isScanProcessing = true;
 
   try {
     const now = new Date();
     const dateStr = getTodayLocalDateStr();
 
-    // PECEGAHAN DUPLIKAT: Cek apakah NISN + Tanggal + Jenis Absen sudah ada di log
+    // PECEGAHAN DUPLIKAT
     const isDuplicate = attendanceLogs.some(log => {
       const logNisn = String(log.nisn || '').trim();
       const logDate = String(log.date || log.timestamp || '').split(' ')[0];
@@ -1057,7 +1085,6 @@ async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
         resEl.innerHTML = `<div class="text-rose-600 font-bold text-sm"><i class="fa-solid fa-triangle-exclamation text-xl mb-1"></i><br>${nama} Sudah Absen (${jenis})!</div>`;
       }
     } else {
-      // Jika Belum Absen, Tambahkan Data Baru
       const logEntry = {
         timestamp: `${dateStr} ${now.toLocaleTimeString('id-ID')}`,
         date: dateStr, time: now.toLocaleTimeString('id-ID'),
@@ -1066,7 +1093,7 @@ async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
       };
 
       attendanceLogs.unshift(logEntry);
-      
+
       const resEl = document.getElementById('agenda-scan-result');
       if (resEl) {
         resEl.innerHTML = `<div class="text-emerald-600 font-bold text-sm"><i class="fa-solid fa-circle-check text-xl mb-1"></i><br>${nama} (${status}) Berhasil Dicatat!</div>`;
@@ -1077,31 +1104,33 @@ async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
   } catch (err) {
     console.error("Error catat absensi:", err);
   } finally {
-    // Jeda 3 detik sebelum diperbolehkan memindai lagi
     setTimeout(() => {
       isScanProcessing = false;
-    }, 3000);
+    }, 3000); // Jeda 3 detik
   }
 }
 
-async function toggleCamera() { if (isCameraActive) await stopCamera(); else await startCamera(); }
 
-// 3. Kamera Umum / Scan Utama (Paksa Kamera Belakang)
+/* --- KAMERA UTAMA --- */
+async function toggleCamera() { 
+  if (isCameraActive) await stopCamera(); else await startCamera(); 
+}
+
 async function startCamera() {
   try {
     document.getElementById('qr-placeholder').style.display = 'none';
     if (!html5QrScanner) html5QrScanner = new Html5Qrcode("qr-reader");
-    
-    // Menggunakan facingMode: "environment" untuk memaksa Kamera Belakang HP
+
     await html5QrScanner.start(
-      { facingMode: "environment" }, 
+      { facingMode: mainFacingMode }, 
       { fps: 10, qrbox: { width: 220, height: 220 } }, 
       (txt) => processAttendanceScan(txt), 
       () => {}
     );
-    
+
     isCameraActive = true; 
-    document.getElementById('camera-btn-text').innerText = "Matikan Kamera";
+    const btnText = document.getElementById('camera-btn-text');
+    if (btnText) btnText.innerText = "Matikan Kamera";
   } catch (e) { 
     console.error(e);
     alert("Gagal membuka kamera. Pastikan izin kamera diberikan."); 
@@ -1112,8 +1141,19 @@ async function stopCamera() {
   if (html5QrScanner && isCameraActive) {
     await html5QrScanner.stop(); 
     isCameraActive = false;
-    document.getElementById('camera-btn-text').innerText = "Nyalakan Kamera";
+    const btnText = document.getElementById('camera-btn-text');
+    if (btnText) btnText.innerText = "Nyalakan Kamera";
     document.getElementById('qr-placeholder').style.display = 'block';
+  }
+}
+
+// Fungsi berganti kamera Depan <-> Belakang pada Scan Utama
+async function switchCameraMain() {
+  mainFacingMode = (mainFacingMode === "environment") ? "user" : "environment";
+  showToast(`Kamera Utama diganti ke: ${mainFacingMode === "environment" ? "Belakang" : "Depan"}`);
+  if (isCameraActive) {
+    await stopCamera();
+    await startCamera();
   }
 }
 
