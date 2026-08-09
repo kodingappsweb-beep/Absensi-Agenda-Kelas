@@ -940,117 +940,185 @@ async function handleLoginAdmin(e) {
     }
 
     /* ============ KAMERA AGENDA & UMUM ============ */
-    async function toggleCameraAgenda() {
-      if (isAgendaCamActive) { await stopCameraAgenda(); } else { await startCameraAgenda(); }
-    }
-    async function startCameraAgenda() {
-      try {
-        const cameras = await Html5Qrcode.getCameras();
-        if (!cameras || cameras.length === 0) { alert("Kamera tidak ditemukan."); return; }
-        document.getElementById('qr-placeholder-agenda').style.display = 'none';
-        if (!html5QrAgenda) html5QrAgenda = new Html5Qrcode("qr-reader-agenda");
-        await html5QrAgenda.start(cameras[0].id, { fps: 10, qrbox: { width: 200, height: 200 } }, (txt) => processAgendaScan(txt), () => {});
-        isAgendaCamActive = true;
-      } catch (e) { alert("Gagal nyalakan kamera agenda"); }
-    }
-    async function stopCameraAgenda() {
-      if (html5QrAgenda && isAgendaCamActive) {
-        await html5QrAgenda.stop();
-        isAgendaCamActive = false;
-        document.getElementById('qr-placeholder-agenda').style.display = 'block';
-      }
-    }
-    function getActiveTeacherClass() {
-      if (!currentLoggedTeacher) return 'Semua';
-      if (currentLoggedTeacher.kelas === 'Semua') {
-        return document.getElementById('agenda-selected-class').value;
-      }
-      return currentLoggedTeacher.kelas;
-    }
+let isScanProcessing = false; // Flag jeda/cooldown agar tidak scan ganda beruntun
 
-    function processAgendaScan(nisnRaw) {
-      const nisn = String(nisnRaw).trim();
-      const student = students.find(s => String(s.nisn).trim() === nisn);
-      if (!student) { showToast("Siswa tidak ditemukan", "error"); return; }
-      
-      const targetKelas = getActiveTeacherClass();
-      if (targetKelas !== 'Semua' && student.kelas !== targetKelas) {
-        showToast(`Peringatan: Siswa dari kelas ${student.kelas} (Bukan kelas ${targetKelas})`, "error");
-        return;
-      }
-      const jamPelajaran = document.getElementById('agenda-jampel').value || 'Jam Pelajaran Umum';
-      const mapelName = document.getElementById('agenda-mapel').value;
-      const sessionName = `${mapelName} (${jamPelajaran})`;
-      recordAttendanceDirect(nisn, student.nama, student.kelas, 'Hadir', sessionName);
-    }
-    function handleAgendaManualScan() {
-      const val = document.getElementById('agenda-manual-nisn').value.trim();
-      if (val) { processAgendaScan(val); document.getElementById('agenda-manual-nisn').value = ''; }
-    }
+async function toggleCameraAgenda() {
+  if (isAgendaCamActive) { await stopCameraAgenda(); } else { await startCameraAgenda(); }
+}
 
-    async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
-      const now = new Date();
-      const dateStr = getTodayLocalDateStr();
+// 1. Kamera Agenda (Paksa Kamera Belakang)
+async function startCameraAgenda() {
+  try {
+    document.getElementById('qr-placeholder-agenda').style.display = 'none';
+    if (!html5QrAgenda) html5QrAgenda = new Html5Qrcode("qr-reader-agenda");
+    
+    // Menggunakan facingMode: "environment" untuk memaksa Kamera Belakang HP
+    await html5QrAgenda.start(
+      { facingMode: "environment" }, 
+      { fps: 10, qrbox: { width: 200, height: 200 } }, 
+      (txt) => processAgendaScan(txt), 
+      () => {}
+    );
+    isAgendaCamActive = true;
+  } catch (e) { 
+    console.error(e);
+    alert("Gagal menyalakan kamera agenda. Pastikan izin kamera telah diberikan."); 
+  }
+}
+
+async function stopCameraAgenda() {
+  if (html5QrAgenda && isAgendaCamActive) {
+    await html5QrAgenda.stop();
+    isAgendaCamActive = false;
+    document.getElementById('qr-placeholder-agenda').style.display = 'block';
+  }
+}
+
+function getActiveTeacherClass() {
+  if (!currentLoggedTeacher) return 'Semua';
+  if (currentLoggedTeacher.kelas === 'Semua') {
+    return document.getElementById('agenda-selected-class').value;
+  }
+  return currentLoggedTeacher.kelas;
+}
+
+function processAgendaScan(nisnRaw) {
+  const nisn = String(nisnRaw).trim();
+  const student = students.find(s => String(s.nisn).trim() === nisn);
+  if (!student) { showToast("Siswa tidak ditemukan", "error"); return; }
+  
+  const targetKelas = getActiveTeacherClass();
+  if (targetKelas !== 'Semua' && student.kelas !== targetKelas) {
+    showToast(`Peringatan: Siswa dari kelas ${student.kelas} (Bukan kelas ${targetKelas})`, "error");
+    return;
+  }
+  const jamPelajaran = document.getElementById('agenda-jampel').value || 'Jam Pelajaran Umum';
+  const mapelName = document.getElementById('agenda-mapel').value;
+  const sessionName = `${mapelName} (${jamPelajaran})`;
+  
+  recordAttendanceDirect(nisn, student.nama, student.kelas, 'Hadir', sessionName);
+}
+
+function handleAgendaManualScan() {
+  const val = document.getElementById('agenda-manual-nisn').value.trim();
+  if (val) { processAgendaScan(val); document.getElementById('agenda-manual-nisn').value = ''; }
+}
+
+// 2. Fungsi Eksekusi Absensi (Mencegah Duplikat & Jeda 3 Detik)
+async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
+  // Jika sedang dalam masa jeda 3 detik, abaikan scan berturut-turut
+  if (isScanProcessing) return;
+  isScanProcessing = true;
+
+  try {
+    const now = new Date();
+    const dateStr = getTodayLocalDateStr();
+
+    // PECEGAHAN DUPLIKAT: Cek apakah NISN + Tanggal + Jenis Absen sudah ada di log
+    const isDuplicate = attendanceLogs.some(log => {
+      const logNisn = String(log.nisn || '').trim();
+      const logDate = String(log.date || log.timestamp || '').split(' ')[0];
+      const logJenis = String(log.jenisAbsen || '').trim();
+
+      return logNisn === String(nisn).trim() && logDate.includes(dateStr) && logJenis === String(jenis).trim();
+    });
+
+    if (isDuplicate) {
+      showToast(`⚠️ Gagal: ${nama} SUDAH berhasil absen untuk ${jenis}!`, "error");
+      const resEl = document.getElementById('agenda-scan-result');
+      if (resEl) {
+        resEl.innerHTML = `<div class="text-rose-600 font-bold text-sm"><i class="fa-solid fa-triangle-exclamation text-xl mb-1"></i><br>${nama} Sudah Absen (${jenis})!</div>`;
+      }
+    } else {
+      // Jika Belum Absen, Tambahkan Data Baru
       const logEntry = {
         timestamp: `${dateStr} ${now.toLocaleTimeString('id-ID')}`,
         date: dateStr, time: now.toLocaleTimeString('id-ID'),
         nisn, nama, kelas, jenisAbsen: jenis, status, peran: 'Siswa', method: 'Agenda Guru',
         guruNip: currentLoggedTeacher ? currentLoggedTeacher.nip : ''
       };
+
       attendanceLogs.unshift(logEntry);
+      
       const resEl = document.getElementById('agenda-scan-result');
       if (resEl) {
         resEl.innerHTML = `<div class="text-emerald-600 font-bold text-sm"><i class="fa-solid fa-circle-check text-xl mb-1"></i><br>${nama} (${status}) Berhasil Dicatat!</div>`;
       }
-      showToast(`Absen ${nama} tercatat`);
+      showToast(`✅ Absen ${nama} tercatat`);
       await postSteinSheet('Absensi', [logEntry]);
     }
+  } catch (err) {
+    console.error("Error catat absensi:", err);
+  } finally {
+    // Jeda 3 detik sebelum diperbolehkan memindai lagi
+    setTimeout(() => {
+      isScanProcessing = false;
+    }, 3000);
+  }
+}
 
-    async function toggleCamera() { if (isCameraActive) await stopCamera(); else await startCamera(); }
-    async function startCamera() {
-      try {
-        const cameras = await Html5Qrcode.getCameras();
-        if (!cameras.length) return;
-        document.getElementById('qr-placeholder').style.display = 'none';
-        if (!html5QrScanner) html5QrScanner = new Html5Qrcode("qr-reader");
-        await html5QrScanner.start(cameras[0].id, { fps: 10, qrbox: { width: 220, height: 220 } }, (txt) => processAttendanceScan(txt), () => {});
-        isCameraActive = true; document.getElementById('camera-btn-text').innerText = "Matikan Kamera";
-      } catch (e) { alert("Gagal buka kamera"); }
-    }
-    async function stopCamera() {
-      if (html5QrScanner && isCameraActive) {
-        await html5QrScanner.stop(); isCameraActive = false;
-        document.getElementById('camera-btn-text').innerText = "Nyalakan Kamera";
-        document.getElementById('qr-placeholder').style.display = 'block';
-      }
-    }
-    function processAttendanceScan(idCode) {
-      const student = students.find(s => String(s.nisn) === String(idCode));
-      if (!student) { showToast("Siswa tidak terdaftar", "error"); return; }
-      recordAttendanceDirect(student.nisn, student.nama, student.kelas, currentScanMode, currentJenisAbsen);
-    }
-    function handleManualInput(e) {
-      e.preventDefault();
-      const val = document.getElementById('manual-nisn-input').value.trim();
-      if (val) { processAttendanceScan(val); document.getElementById('manual-nisn-input').value = ''; }
-    }
-    function setJenisAbsen(jenis) {
-      currentJenisAbsen = jenis;
-      document.querySelectorAll('.jenis-absen-btn').forEach(b => {
-        b.className = "jenis-absen-btn py-2 px-2 rounded-xl border text-xs font-bold text-center border-slate-200 bg-white text-slate-700";
-      });
-      const activeBtn = document.getElementById('jenis-' + jenis);
-      if (activeBtn) activeBtn.className = "jenis-absen-btn py-2 px-2 rounded-xl border text-xs font-bold text-center border-indigo-600 bg-indigo-600 text-white shadow-xs";
-    }
-    function setScanMode(mode) {
-      currentScanMode = mode;
-      document.querySelectorAll('.scan-mode-btn').forEach(b => {
-        b.className = "scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600";
-      });
-      const activeBtn = document.getElementById('mode-' + mode);
-      if (activeBtn) activeBtn.className = "scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-indigo-500 bg-indigo-50 text-indigo-700";
-    }
+async function toggleCamera() { if (isCameraActive) await stopCamera(); else await startCamera(); }
 
+// 3. Kamera Umum / Scan Utama (Paksa Kamera Belakang)
+async function startCamera() {
+  try {
+    document.getElementById('qr-placeholder').style.display = 'none';
+    if (!html5QrScanner) html5QrScanner = new Html5Qrcode("qr-reader");
+    
+    // Menggunakan facingMode: "environment" untuk memaksa Kamera Belakang HP
+    await html5QrScanner.start(
+      { facingMode: "environment" }, 
+      { fps: 10, qrbox: { width: 220, height: 220 } }, 
+      (txt) => processAttendanceScan(txt), 
+      () => {}
+    );
+    
+    isCameraActive = true; 
+    document.getElementById('camera-btn-text').innerText = "Matikan Kamera";
+  } catch (e) { 
+    console.error(e);
+    alert("Gagal membuka kamera. Pastikan izin kamera diberikan."); 
+  }
+}
+
+async function stopCamera() {
+  if (html5QrScanner && isCameraActive) {
+    await html5QrScanner.stop(); 
+    isCameraActive = false;
+    document.getElementById('camera-btn-text').innerText = "Nyalakan Kamera";
+    document.getElementById('qr-placeholder').style.display = 'block';
+  }
+}
+
+function processAttendanceScan(idCode) {
+  const student = students.find(s => String(s.nisn) === String(idCode));
+  if (!student) { showToast("Siswa tidak terdaftar", "error"); return; }
+  recordAttendanceDirect(student.nisn, student.nama, student.kelas, currentScanMode, currentJenisAbsen);
+}
+
+function handleManualInput(e) {
+  e.preventDefault();
+  const val = document.getElementById('manual-nisn-input').value.trim();
+  if (val) { processAttendanceScan(val); document.getElementById('manual-nisn-input').value = ''; }
+}
+
+function setJenisAbsen(jenis) {
+  currentJenisAbsen = jenis;
+  document.querySelectorAll('.jenis-absen-btn').forEach(b => {
+    b.className = "jenis-absen-btn py-2 px-2 rounded-xl border text-xs font-bold text-center border-slate-200 bg-white text-slate-700";
+  });
+  const activeBtn = document.getElementById('jenis-' + jenis);
+  if (activeBtn) activeBtn.className = "jenis-absen-btn py-2 px-2 rounded-xl border text-xs font-bold text-center border-indigo-600 bg-indigo-600 text-white shadow-xs";
+}
+
+function setScanMode(mode) {
+  currentScanMode = mode;
+  document.querySelectorAll('.scan-mode-btn').forEach(b => {
+    b.className = "scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600";
+  });
+  const activeBtn = document.getElementById('mode-' + mode);
+  if (activeBtn) activeBtn.className = "scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-indigo-500 bg-indigo-50 text-indigo-700";
+}
     /* ============ CETAK KARTU (JABATAN GURU DIBUANG & LOGO FIXED) ============ */
     function renderKtsCards() {
       const container = document.getElementById('print-section');
