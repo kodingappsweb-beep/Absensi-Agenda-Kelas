@@ -403,55 +403,48 @@
 
           <!-- Bagian Scan QR di Agenda Kelas -->
 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-      <i class="fa-solid fa-camera text-indigo-600"></i>
-      <span>Scan QR Kehadiran Siswa untuk Kelas Ini</span>
-    </h4>
-    
-    <!-- Tombol Kontrol Kamera Agenda (Dipindah keluar dari placeholder agar tidak tersembunyi) -->
-    <div class="flex items-center gap-2">
-      <button onclick="toggleCameraAgenda()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs">
-        <i class="fa-solid fa-power-off mr-1"></i>
-        <span id="camera-agenda-btn-text">Nyalakan Kamera</span>
-      </button>
-      <button type="button" onclick="switchCameraAgenda()" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all">
-        <i class="fa-solid fa-camera-rotate mr-1"></i> Ganti Kamera
-      </button>
-    </div>
-  </div>
-
+  <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+    <i class="fa-solid fa-camera text-indigo-600"></i>
+    <span>Scan QR Kehadiran Siswa untuk Kelas Ini</span>
+  </h4>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-    <div class="lg:col-span-7 bg-slate-900 rounded-2xl overflow-hidden min-h-[260px] flex items-center justify-center relative border border-slate-800">
+    <div class="lg:col-span-7 bg-slate-900 rounded-2xl overflow-hidden min-h-[260px] flex items-center justify-center relative">
       <div id="qr-reader-agenda" class="w-full h-full"></div>
-      
-      <!-- Placeholder Kamera Agenda -->
-      <div id="qr-placeholder-agenda" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-slate-400 bg-slate-900 z-10">
+      <div id="qr-placeholder-agenda" class="text-center p-6 text-slate-400">
         <div class="w-14 h-14 rounded-2xl bg-slate-800 text-indigo-400 flex items-center justify-center mx-auto mb-2 text-xl border border-slate-700">
           <i class="fa-solid fa-qrcode"></i>
         </div>
         <p class="font-medium text-xs text-slate-300">Kamera Scanner Non-aktif</p>
-        <p class="text-[11px] text-slate-500 mt-1">Klik tombol "Nyalakan Kamera" di atas</p>
+        
+        <!-- Tombol Kontrol Kamera Agenda -->
+        <div class="flex items-center justify-center gap-2 mt-3">
+          <button onclick="toggleCameraAgenda()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all">
+            <span id="camera-agenda-btn-text">Nyalakan Kamera</span>
+          </button>
+          <button type="button" onclick="switchCameraAgenda()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold border border-slate-700 transition-all">
+            <i class="fa-solid fa-camera-rotate mr-1"></i> Ganti Kamera
+          </button>
+        </div>
+
       </div>
     </div>
-
     <div class="lg:col-span-5 flex flex-col justify-between space-y-3">
-      <div id="agenda-scan-result" class="bg-white p-5 rounded-2xl border shadow-2xs flex flex-col items-center justify-center text-center h-full min-h-[180px]">
+      <div id="agenda-scan-result" class="bg-white p-5 rounded-2xl border shadow-2xs flex flex-col items-center justify-center text-center h-full">
         <i class="fa-solid fa-id-badge text-slate-300 text-3xl mb-2"></i>
         <p class="text-xs font-semibold text-slate-500">Arahkan QR Code siswa ke kamera atau input manual di bawah.</p>
       </div>
       <div class="flex gap-2">
         <input type="text" id="agenda-manual-nisn" placeholder="Atau ketik NISN..." class="flex-1 px-3 py-2 bg-white border rounded-xl text-xs">
-        <button onclick="handleAgendaManualScan()" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800">Catat</button>
+        <button onclick="handleAgendaManualScan()" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold">Catat</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SCAN QR GENERAL VIEW (Halaman Scan Admin) -->
+      <!-- SCAN QR GENERAL VIEW -->
 <section id="view-scan" class="page-view space-y-6 hidden">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-    <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
+    <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
       <div>
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <div>
@@ -485,10 +478,9 @@
           </div>
         </div>
 
-        <!-- Box Frame Kamera -->
         <div class="relative bg-slate-900 rounded-2xl overflow-hidden min-h-[280px] sm:min-h-[340px] flex items-center justify-center border-2 border-indigo-500/20">
           <div id="qr-reader" class="w-full h-full"></div>
-          <div id="qr-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 text-slate-400 bg-slate-900 z-10">
+          <div id="qr-placeholder" class="text-center p-8 text-slate-400">
             <div class="w-16 h-16 rounded-2xl bg-slate-800 text-indigo-400 flex items-center justify-center mx-auto mb-3 text-2xl border border-slate-700"><i class="fa-solid fa-qrcode"></i></div>
             <p class="font-medium text-sm text-slate-300">Kamera Non-aktif</p>
             <p class="text-xs text-slate-500 mt-1">Klik tombol "Nyalakan Kamera" di atas</p>
@@ -496,35 +488,34 @@
         </div>
       </div>
 
-      <!-- Tombol Status Kehadiran -->
-      <div class="pt-4 border-t border-slate-100">
-        <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Status Kehadiran:</label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="scan-mode-container">
-          <button onclick="setScanMode('Hadir')" id="mode-Hadir" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-indigo-500 bg-indigo-50 text-indigo-700"><i class="fa-solid fa-check mr-1"></i> Hadir</button>
-          <button onclick="setScanMode('Alfa')" id="mode-Alfa" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600"><i class="fa-solid fa-xmark mr-1"></i> Alfa</button>
-          <button onclick="setScanMode('Izin')" id="mode-Izin" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600"><i class="fa-solid fa-envelope mr-1"></i> Izin</button>
-          <button onclick="setScanMode('Sakit')" id="mode-Sakit" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600"><i class="fa-solid fa-notes-medical mr-1"></i> Sakit</button>
-        </div>
-      </div>
-    </div>
+            <!-- Tombol Status Kehadiran -->
+            <div class="mt-6 pt-4 border-t border-slate-100">
+              <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Status Kehadiran:</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="scan-mode-container">
+                <button onclick="setScanMode('Hadir')" id="mode-Hadir" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-indigo-500 bg-indigo-50 text-indigo-700"><i class="fa-solid fa-check mr-1"></i> Hadir</button>
+                <button onclick="setScanMode('Alfa')" id="mode-Alfa" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600"><i class="fa-solid fa-xmark mr-1"></i> Alfa</button>
+                <button onclick="setScanMode('Izin')" id="mode-Izin" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600"><i class="fa-solid fa-envelope mr-1"></i> Izin</button>
+                <button onclick="setScanMode('Sakit')" id="mode-Sakit" class="scan-mode-btn py-2 px-2 rounded-xl border-2 text-xs font-bold text-center border-slate-200 bg-slate-50 text-slate-600"><i class="fa-solid fa-notes-medical mr-1"></i> Sakit</button>
+              </div>
+            </div>
+          </div>
 
-    <div class="lg:col-span-5 space-y-6">
-      <div id="scan-result-card" class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col items-center justify-center text-center min-h-[220px]">
-        <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-2xl mb-3"><i class="fa-solid fa-id-badge"></i></div>
-        <h4 class="font-bold text-slate-700 text-base">Menunggu Pemindaian</h4>
-        <p class="text-xs text-slate-400 mt-1">Siswa/Guru yang discan akan otomatis divalidasi</p>
-      </div>
-      <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs">
-        <h4 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2"><i class="fa-keyboard fa-solid text-indigo-600"></i><span>Input Manual ID / NISN / NIP</span></h4>
-        <p class="text-xs text-slate-500 mb-4">Gunakan jika QR Code rusak atau tidak terbaca</p>
-        <form onsubmit="handleManualInput(event)" class="space-y-3">
-          <input type="text" id="manual-nisn-input" placeholder="Masukkan NISN Siswa / NIP Guru..." required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
-          <button type="submit" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm shadow-md"><i class="fa-solid fa-paper-plane mr-1"></i> Catat Absensi Manual</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
+          <div class="lg:col-span-5 space-y-6">
+            <div id="scan-result-card" class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col items-center justify-center text-center min-h-[220px]">
+              <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-2xl mb-3"><i class="fa-solid fa-id-badge"></i></div>
+              <h4 class="font-bold text-slate-700 text-base">Menunggu Pemindaian</h4><p class="text-xs text-slate-400 mt-1">Siswa/Guru yang discan akan otomatis divalidasi</p>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs">
+              <h4 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2"><i class="fa-keyboard fa-solid text-indigo-600"></i><span>Input Manual ID / NISN / NIP</span></h4>
+              <p class="text-xs text-slate-500 mb-4">Gunakan jika QR Code rusak atau tidak terbaca</p>
+              <form onsubmit="handleManualInput(event)" class="space-y-3">
+                <input type="text" id="manual-nisn-input" placeholder="Masukkan NISN Siswa / NIP Guru..." required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
+                <button type="submit" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm shadow-md"><i class="fa-solid fa-paper-plane mr-1"></i> Catat Absensi Manual</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- CETAK KARTU VIEW -->
       <section id="view-kts" class="page-view space-y-6 hidden">
@@ -976,46 +967,26 @@ async function handleLoginAdmin(e) {
     }
 
     /* ============ KAMERA AGENDA & UMUM ============ */
-// Deklarasi Variabel Global Kamera & State
-let html5QrAgenda = null;
-let html5QrScanner = null;
-let isAgendaCamActive = false;
-let isCameraActive = false;
-let isScanProcessing = false;
+let isScanProcessing = false; // Flag jeda/cooldown agar tidak scan ganda beruntun
 
-let mainFacingMode = "environment";
-let agendaFacingMode = "environment";
-
-let currentScanMode = "Hadir";
-let currentJenisAbsen = "Masuk Sekolah";
-
-/* --- KAMERA AGENDA KELAS --- */
 async function toggleCameraAgenda() {
-  if (isAgendaCamActive) { 
-    await stopCameraAgenda(); 
-  } else { 
-    await startCameraAgenda(); 
-  }
+  if (isAgendaCamActive) { await stopCameraAgenda(); } else { await startCameraAgenda(); }
 }
 
+// 1. Kamera Agenda (Paksa Kamera Belakang)
 async function startCameraAgenda() {
   try {
-    const placeholder = document.getElementById('qr-placeholder-agenda');
-    if (placeholder) placeholder.style.display = 'none';
-
+    document.getElementById('qr-placeholder-agenda').style.display = 'none';
     if (!html5QrAgenda) html5QrAgenda = new Html5Qrcode("qr-reader-agenda");
-
+    
+    // Menggunakan facingMode: "environment" untuk memaksa Kamera Belakang HP
     await html5QrAgenda.start(
-      { facingMode: agendaFacingMode }, 
+      { facingMode: "environment" }, 
       { fps: 10, qrbox: { width: 200, height: 200 } }, 
       (txt) => processAgendaScan(txt), 
       () => {}
     );
-
     isAgendaCamActive = true;
-    const btnTextAgenda = document.getElementById('camera-agenda-btn-text');
-    if (btnTextAgenda) btnTextAgenda.innerText = "Matikan Kamera";
-
   } catch (e) { 
     console.error(e);
     alert("Gagal menyalakan kamera agenda. Pastikan izin kamera telah diberikan."); 
@@ -1026,71 +997,52 @@ async function stopCameraAgenda() {
   if (html5QrAgenda && isAgendaCamActive) {
     await html5QrAgenda.stop();
     isAgendaCamActive = false;
-    
-    const placeholder = document.getElementById('qr-placeholder-agenda');
-    if (placeholder) placeholder.style.display = 'flex';
-
-    const btnTextAgenda = document.getElementById('camera-agenda-btn-text');
-    if (btnTextAgenda) btnTextAgenda.innerText = "Nyalakan Kamera";
-  }
-}
-
-async function switchCameraAgenda() {
-  agendaFacingMode = (agendaFacingMode === "environment") ? "user" : "environment";
-  if (typeof showToast === 'function') showToast(`Kamera Agenda diganti ke: ${agendaFacingMode === "environment" ? "Belakang" : "Depan"}`);
-  if (isAgendaCamActive) {
-    await stopCameraAgenda();
-    await startCameraAgenda();
+    document.getElementById('qr-placeholder-agenda').style.display = 'block';
   }
 }
 
 function getActiveTeacherClass() {
-  if (typeof currentLoggedTeacher === 'undefined' || !currentLoggedTeacher) return 'Semua';
+  if (!currentLoggedTeacher) return 'Semua';
   if (currentLoggedTeacher.kelas === 'Semua') {
-    const el = document.getElementById('agenda-selected-class');
-    return el ? el.value : 'Semua';
+    return document.getElementById('agenda-selected-class').value;
   }
   return currentLoggedTeacher.kelas;
 }
 
 function processAgendaScan(nisnRaw) {
   const nisn = String(nisnRaw).trim();
-  const student = (typeof students !== 'undefined' ? students : []).find(s => String(s.nisn).trim() === nisn);
-  if (!student) { if (typeof showToast === 'function') showToast("Siswa tidak ditemukan", "error"); return; }
-
+  const student = students.find(s => String(s.nisn).trim() === nisn);
+  if (!student) { showToast("Siswa tidak ditemukan", "error"); return; }
+  
   const targetKelas = getActiveTeacherClass();
   if (targetKelas !== 'Semua' && student.kelas !== targetKelas) {
-    if (typeof showToast === 'function') showToast(`Peringatan: Siswa dari kelas ${student.kelas} (Bukan kelas ${targetKelas})`, "error");
+    showToast(`Peringatan: Siswa dari kelas ${student.kelas} (Bukan kelas ${targetKelas})`, "error");
     return;
   }
-  const jamEl = document.getElementById('agenda-jampel');
-  const mapelEl = document.getElementById('agenda-mapel');
-  const jamPelajaran = jamEl ? jamEl.value : 'Jam Pelajaran Umum';
-  const mapelName = mapelEl ? mapelEl.value : '';
+  const jamPelajaran = document.getElementById('agenda-jampel').value || 'Jam Pelajaran Umum';
+  const mapelName = document.getElementById('agenda-mapel').value;
   const sessionName = `${mapelName} (${jamPelajaran})`;
-
+  
   recordAttendanceDirect(nisn, student.nama, student.kelas, 'Hadir', sessionName);
 }
 
 function handleAgendaManualScan() {
-  const inputEl = document.getElementById('agenda-manual-nisn');
-  if (!inputEl) return;
-  const val = inputEl.value.trim();
-  if (val) { processAgendaScan(val); inputEl.value = ''; }
+  const val = document.getElementById('agenda-manual-nisn').value.trim();
+  if (val) { processAgendaScan(val); document.getElementById('agenda-manual-nisn').value = ''; }
 }
 
-
-/* --- PROSES SIMPAN ABSENSI & ANTI DUPLIKAT --- */
+// 2. Fungsi Eksekusi Absensi (Mencegah Duplikat & Jeda 3 Detik)
 async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
-  if (isScanProcessing) return; 
+  // Jika sedang dalam masa jeda 3 detik, abaikan scan berturut-turut
+  if (isScanProcessing) return;
   isScanProcessing = true;
 
   try {
     const now = new Date();
-    const dateStr = typeof getTodayLocalDateStr === 'function' ? getTodayLocalDateStr() : now.toISOString().split('T')[0];
+    const dateStr = getTodayLocalDateStr();
 
-    const logs = typeof attendanceLogs !== 'undefined' ? attendanceLogs : [];
-    const isDuplicate = logs.some(log => {
+    // PECEGAHAN DUPLIKAT: Cek apakah NISN + Tanggal + Jenis Absen sudah ada di log
+    const isDuplicate = attendanceLogs.some(log => {
       const logNisn = String(log.nisn || '').trim();
       const logDate = String(log.date || log.timestamp || '').split(' ')[0];
       const logJenis = String(log.jenisAbsen || '').trim();
@@ -1099,60 +1051,57 @@ async function recordAttendanceDirect(nisn, nama, kelas, status, jenis) {
     });
 
     if (isDuplicate) {
-      if (typeof showToast === 'function') showToast(`⚠️ Gagal: ${nama} SUDAH berhasil absen untuk ${jenis}!`, "error");
+      showToast(`⚠️ Gagal: ${nama} SUDAH berhasil absen untuk ${jenis}!`, "error");
       const resEl = document.getElementById('agenda-scan-result');
       if (resEl) {
         resEl.innerHTML = `<div class="text-rose-600 font-bold text-sm"><i class="fa-solid fa-triangle-exclamation text-xl mb-1"></i><br>${nama} Sudah Absen (${jenis})!</div>`;
       }
     } else {
+      // Jika Belum Absen, Tambahkan Data Baru
       const logEntry = {
         timestamp: `${dateStr} ${now.toLocaleTimeString('id-ID')}`,
         date: dateStr, time: now.toLocaleTimeString('id-ID'),
         nisn, nama, kelas, jenisAbsen: jenis, status, peran: 'Siswa', method: 'Agenda Guru',
-        guruNip: (typeof currentLoggedTeacher !== 'undefined' && currentLoggedTeacher) ? currentLoggedTeacher.nip : ''
+        guruNip: currentLoggedTeacher ? currentLoggedTeacher.nip : ''
       };
 
-      if (typeof attendanceLogs !== 'undefined') attendanceLogs.unshift(logEntry);
-
+      attendanceLogs.unshift(logEntry);
+      
       const resEl = document.getElementById('agenda-scan-result');
       if (resEl) {
         resEl.innerHTML = `<div class="text-emerald-600 font-bold text-sm"><i class="fa-solid fa-circle-check text-xl mb-1"></i><br>${nama} (${status}) Berhasil Dicatat!</div>`;
       }
-      if (typeof showToast === 'function') showToast(`✅ Absen ${nama} tercatat`);
-      if (typeof postSteinSheet === 'function') await postSteinSheet('Absensi', [logEntry]);
+      showToast(`✅ Absen ${nama} tercatat`);
+      await postSteinSheet('Absensi', [logEntry]);
     }
   } catch (err) {
     console.error("Error catat absensi:", err);
   } finally {
+    // Jeda 3 detik sebelum diperbolehkan memindai lagi
     setTimeout(() => {
       isScanProcessing = false;
     }, 3000);
   }
 }
 
+async function toggleCamera() { if (isCameraActive) await stopCamera(); else await startCamera(); }
 
-/* --- KAMERA UTAMA / ADMIN --- */
-async function toggleCamera() { 
-  if (isCameraActive) await stopCamera(); else await startCamera(); 
-}
-
+// 3. Kamera Umum / Scan Utama (Paksa Kamera Belakang)
 async function startCamera() {
   try {
-    const placeholder = document.getElementById('qr-placeholder');
-    if (placeholder) placeholder.style.display = 'none';
-
+    document.getElementById('qr-placeholder').style.display = 'none';
     if (!html5QrScanner) html5QrScanner = new Html5Qrcode("qr-reader");
-
+    
+    // Menggunakan facingMode: "environment" untuk memaksa Kamera Belakang HP
     await html5QrScanner.start(
-      { facingMode: mainFacingMode }, 
+      { facingMode: "environment" }, 
       { fps: 10, qrbox: { width: 220, height: 220 } }, 
       (txt) => processAttendanceScan(txt), 
       () => {}
     );
-
+    
     isCameraActive = true; 
-    const btnText = document.getElementById('camera-btn-text');
-    if (btnText) btnText.innerText = "Matikan Kamera";
+    document.getElementById('camera-btn-text').innerText = "Matikan Kamera";
   } catch (e) { 
     console.error(e);
     alert("Gagal membuka kamera. Pastikan izin kamera diberikan."); 
@@ -1163,36 +1112,21 @@ async function stopCamera() {
   if (html5QrScanner && isCameraActive) {
     await html5QrScanner.stop(); 
     isCameraActive = false;
-    
-    const placeholder = document.getElementById('qr-placeholder');
-    if (placeholder) placeholder.style.display = 'flex';
-
-    const btnText = document.getElementById('camera-btn-text');
-    if (btnText) btnText.innerText = "Nyalakan Kamera";
-  }
-}
-
-async function switchCameraMain() {
-  mainFacingMode = (mainFacingMode === "environment") ? "user" : "environment";
-  if (typeof showToast === 'function') showToast(`Kamera Utama diganti ke: ${mainFacingMode === "environment" ? "Belakang" : "Depan"}`);
-  if (isCameraActive) {
-    await stopCamera();
-    await startCamera();
+    document.getElementById('camera-btn-text').innerText = "Nyalakan Kamera";
+    document.getElementById('qr-placeholder').style.display = 'block';
   }
 }
 
 function processAttendanceScan(idCode) {
-  const student = (typeof students !== 'undefined' ? students : []).find(s => String(s.nisn) === String(idCode));
-  if (!student) { if (typeof showToast === 'function') showToast("Siswa tidak terdaftar", "error"); return; }
+  const student = students.find(s => String(s.nisn) === String(idCode));
+  if (!student) { showToast("Siswa tidak terdaftar", "error"); return; }
   recordAttendanceDirect(student.nisn, student.nama, student.kelas, currentScanMode, currentJenisAbsen);
 }
 
 function handleManualInput(e) {
   e.preventDefault();
-  const inputEl = document.getElementById('manual-nisn-input');
-  if (!inputEl) return;
-  const val = inputEl.value.trim();
-  if (val) { processAttendanceScan(val); inputEl.value = ''; }
+  const val = document.getElementById('manual-nisn-input').value.trim();
+  if (val) { processAttendanceScan(val); document.getElementById('manual-nisn-input').value = ''; }
 }
 
 function setJenisAbsen(jenis) {
