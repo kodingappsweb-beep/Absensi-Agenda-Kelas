@@ -806,21 +806,40 @@ function switchLoginTab(role) {
   }
 }
 
-function handleLoginAdmin(e) {
+async function handleLoginAdmin(e) {
   e.preventDefault();
   const u = document.getElementById('admin-user').value.trim();
   const p = document.getElementById('admin-pass').value.trim();
 
-  // Mencocokkan dengan data Kolom A (username) dan Kolom B (password) di sheet ManajemenUser
-  const matchedAdmin = adminUsers.find(
-    user => String(user.username || '').trim() === u && String(user.password || '').trim() === p
-  );
+  // 1. Tarik data admin langsung saat tombol login diklik
+  try {
+    const data = await getSteinSheet('ManajemenUser');
+    if (Array.isArray(data) && data.length > 0) {
+      adminUsers = data;
+    }
+  } catch (err) {
+    console.error("Gagal memuat data ManajemenUser:", err);
+  }
+
+  if (!adminUsers || adminUsers.length === 0) {
+    alert("Gagal menghubungkan ke spreadsheet ManajemenUser atau data masih kosong!");
+    return;
+  }
+
+  // 2. Pencocokan fleksibel (membaca berbagai format nama kolom)
+  const matchedAdmin = adminUsers.find(user => {
+    // Membaca username (baik header kolom 'username', 'Username', atau 'USERNAME')
+    const dbUser = String(user.username || user.Username || user.USERNAME || '').trim();
+    // Membaca password (baik header kolom 'password', 'Password', atau 'PASSWORD')
+    const dbPass = String(user.password || user.Password || user.PASSWORD || '').trim();
+
+    return dbUser.toLowerCase() === u.toLowerCase() && dbPass === p;
+  });
 
   if (matchedAdmin) {
     currentUserRole = 'admin';
     currentLoggedTeacher = null;
 
-    // Kosongkan input setelah berhasil login
     document.getElementById('admin-user').value = '';
     document.getElementById('admin-pass').value = '';
 
